@@ -35,7 +35,9 @@ class SeleniumBot():
 			options.set_headless(headless=True)
 			profile = webdriver.FirefoxProfile()
 
-			self.current_user_agent = random.choice(self.user_agents[self.device_type])
+			self.device_type_index = random.randrange(len(self.device_type))
+
+			self.current_user_agent = random.choice(self.user_agents[self.device_type[self.device_type_index]])
 			profile.set_preference("general.useragent.override", self.current_user_agent)
 			
 			self.driver = webdriver.Firefox(profile, firefox_options=options)
@@ -62,7 +64,7 @@ class SeleniumBot():
 	def url(self):
 		print('step begin')
 		# print('screen_resolutions : {}'.format(self.screen_resolutions['phone']))
-		current_screen_resolution = random.choice(self.screen_resolutions[self.device_type])
+		current_screen_resolution = random.choice(self.screen_resolutions[self.device_type[self.device_type_index]])
 		
 		#todo change webagent
 		#todo change proxy

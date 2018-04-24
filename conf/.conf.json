@@ -5,10 +5,7 @@
 	"client_hosts": 6000,
 	"clicks": {"from": 2, "to": 20},
 	"time_on_url": {"from" : 1, "to" : 60},
-	"device_type" : [
-			"phone",
-			"pc"
-		],
+	"device_type" : "phone",
 	"proxy_type": "",
 	"start_time": "now"
 }
