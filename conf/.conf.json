@@ -1,11 +1,14 @@
 {
 	"project_name" : "project_name",
-	"target_url" : "https://yandex.ru",
+	"target_url" : "http://2ip.ru",
 	"referer_url" : "",
 	"client_hosts": 6000,
-	"clicks": {"from": 2, "to": 20},
-	"time_on_url": {"from" : 1, "to" : 60},
-	"device_type" : "phone",
+	"clicks_per_user": {"from": 2, "to": 20},
+	"time_on_url": {"from" : 1, "to" : 11160},
+	"device_type" : [
+			"phone",
+			"pc"
+		],
 	"proxy_type": "",
 	"start_time": "now"
 }
