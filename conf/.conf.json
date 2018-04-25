@@ -4,7 +4,7 @@
 	"referer_url" : "",
 	"client_hosts": 6000,
 	"clicks_per_user": {"from": 2, "to": 20},
-	"time_on_url": {"from" : 1, "to" : 11160},
+	"time_on_url": {"from" : 1, "to" : 1181650},
 	"device_type" : [
 			"phone",
 			"pc"

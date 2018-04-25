@@ -27,25 +27,28 @@ class SeleniumBot():
 
 			device_type_index = random.randrange(len(self.device_type))
 			current_user_agent = random.choice(self.user_agents[self.device_type[device_type_index]])
-			# proxy_index = random.randrange(len(self.proxy_list['proxy_list']))
+
 			current_proxy = random.choice(self.proxy_list['proxy_list'])
 
-			# print(self.current_proxy.keys())
-			current_proxy_addr = list(current_proxy)[0]
-			current_proxy_port = current_proxy[current_proxy_addr]
-			
-			print('Proxy {} {}'.format(current_proxy_addr, current_proxy_port))
+			print(current_proxy)
 
-			profile.set_preference("network.proxy.type", 1)
-			profile.set_preference("network.proxy.socks", current_proxy_addr)
-			profile.set_preference("network.proxy.socks_port", current_proxy_port);			
+			current_proxy_addr = list(current_proxy)[0]
+			current_proxy_port = current_proxy[current_proxy_addr]			
 
 			profile.set_preference("general.useragent.override", current_user_agent)
-			
-			profile.update_preferences()
-			self.driver = webdriver.Firefox(firefox_profile=profile, firefox_options=options)
 
-			# print(self.driver)
+			profile.set_preference("network.proxy.type", 1)
+			# profile.set_preference("network.proxy.share_proxy_settings", True)
+			profile.set_preference("network.http.use-cache", False)
+			# profile.set_preference("network.proxy.http", current_proxy_addr)
+			# profile.set_preference("network.proxy.http_port", int(current_proxy_port))
+			# profile.set_preference('network.proxy.ssl_port', int(current_proxy_port))
+			# profile.set_preference('network.proxy.ssl', current_proxy_addr)
+			profile.set_preference('network.proxy.socks', current_proxy_addr)
+			profile.set_preference('network.proxy.socks_port', int(current_proxy_port))		
+			
+			# profile.update_preferences()
+			self.driver = webdriver.Firefox(firefox_profile=profile, firefox_options=options)
 
 			current_screen_resolution = random.choice(self.screen_resolutions[self.device_type[device_type_index]])
 
