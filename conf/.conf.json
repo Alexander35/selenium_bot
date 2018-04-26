@@ -1,14 +1,19 @@
 {
 	"project_name" : "project_name",
-	"target_url" : "http://2ip.ru",
+	"target_url" : [ 
+			"http://asn24.ru",
+			"https://asn24.ru/blagotvoritelnost/",
+			"https://asn24.ru/afisha/"
+		],	
+	"referer" : "https://youtube.com",
 	"referer_url" : "",
 	"client_hosts": 6000,
-	"clicks_per_user": {"from": 2, "to": 20},
-	"time_on_url": {"from" : 1, "to" : 1181650},
+	"clicks_per_user": {"from": 2, "to": 2000},
+	"time_on_session": {"from" : 1, "to" : 160},
 	"device_type" : [
 			"phone",
 			"pc"
 		],
-	"proxy_type": "",
+	"proxy_type": "no",
 	"start_time": "now"
 }
