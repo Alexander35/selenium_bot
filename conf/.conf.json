@@ -4,11 +4,21 @@
 			"http://asn24.ru",
 			"https://asn24.ru/blagotvoritelnost/",
 			"https://asn24.ru/afisha/"
-		],	
+		],
+	"search_keywords" : [
+		"asn24",
+		"новости благовещенск",
+		"асн"
+	],
+	"search_engines": [
+		"https://www.google.com/search?q=",
+		"https://yandex.ru/search/?text=",
+		"https://search.yahoo.com/search?p="
+	],		
 	"referer_url" : "https://youtube.com",
 	"client_hosts": 6000,
 	"clicks_per_user": {"from": 2, "to": 2000},
-	"time_on_session": {"from" : 1, "to" : 160},
+	"time_on_session": {"from" : 1, "to" : 100},
 	"device_type" : [
 			"phone",
 			"pc"

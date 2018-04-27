@@ -16,41 +16,29 @@ class BotManager():
 		self.create_schedule()	
 
 	def calculate_threads_number(self):
-		return 1 + self.conf['client_hosts'] // (86400 // self.conf['time_on_url']['to'])
+		return 1 + self.conf['client_hosts'] // (86400 // self.conf['time_on_session']['to'])
 
 	def create_schedule(self):
-		day_time = []
-		night_time = []
+		day_time_start = []
+		night_time_start = []
 
-		for i in range(int(self.thread_numbers * 0.8)): 
-			day_time.append(random.randrange(12, 23))
+
+		day_time_start.append(random.randrange(12, 23))
+
+		for i in range(int(self.thread_numbers * 0.8)-1): 
+			day_time_start.append(random.randrange(12, 23))
 		
 		for	i in range(int(self.thread_numbers * 0.2)):
-			night_time.append(random.randrange(0, 11))
+			night_time_start.append(random.randrange(0, 11))
 
-		a = {'day_time' : day_time, 'night_time' : night_time}	
-
-		print(a)	
-
-		# return ('day_time': day_time, 'night_time' : night_time)
+		self.sheduled_time_to_start = {'day_time' : day_time_start, 'night_time' : night_time_start}	
 	
-	def spawn_thread(self):
+	def write_schedule_to_celery(self):
 		pass		
-
 
 def main():
 
-	
-	# run with one UA sting for client_hosts times
-	# SB = SeleniumBot(
-	# 		conf['target_url'],
-	# 		conf['device_type'], 
-	# 		conf['client_hosts'], 
-	# 		conf['time_on_url']
-	# 	)
-
 	BM = BotManager()
-
 
 if __name__ == '__main__':
 	main()

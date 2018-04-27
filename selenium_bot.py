@@ -83,6 +83,12 @@ class SeleniumBot():
 	def do(self):
 
 		try:
+			print('search_keywords : {}'.format(self.conf['search_keywords'])  )
+			print('search_keywords : {}'.format(self.conf['search_engines'])  )
+			
+			if self.conf['search_keywords'] != []:
+				self.search_in_the_web()
+
 			self.timer = time.time()
 			self.get_current_url_time()
 			self.get_url()
@@ -111,8 +117,12 @@ class SeleniumBot():
 	def how_many_time(self):
 		return time.time() - self.timer
 
+	def get_all_links(self):
+		return self.driver.find_elements_by_tag_name('a')	
+
 	def clicker(self, n):
-		all_links = self.driver.find_elements_by_tag_name('a')
+		# all_links = self.driver.find_elements_by_tag_name('a')
+		all_links = self.get_all_links()
 
 		try:
 			all_links[random.randrange(len(all_links))].click()
@@ -127,14 +137,35 @@ class SeleniumBot():
 	def get_url(self):
 
 		# self.driver.implicitly_wait(10)
-		requests.get(self.current_target_url, headers={'referer': self.conf['referer_url']})
+		if self.conf['referer_url'] != "no":
+			requests.get(self.current_target_url, headers={'referer': self.conf['referer_url']})
 		# print('ref : {}'.format(a))
 		print('get_current_target_url : {}'.format(self.current_target_url))
 		self.driver.get(self.current_target_url)
 
+	def search_in_the_web(self):
+		for search_engine in self.conf['search_engines']:
+			for keyword in self.conf['search_keywords']:
+				try:
+					print(search_engine, keyword,self.conf['target_url'][0])
+					self.driver.get('{}{}'.format(search_engine,keyword))
+					links = self.driver.find_elements_by_xpath("//*[contains(text(), '{}')]".format('!'))
+					# link[0].click()
+					# print(link.get_attribute('text'))
+					# self.driver.get('search_engine')
+					# all_links = self.get_all_links()
+					for l in links:
+						print('LINK :{} '.format(l.get_attribute('text')))
+				except Exception as exc:
+					print('error when search keywords : {}'.format(exc))	
+
+	def parse_links(self):
+		pass		
+		
+
 def main():
 	try:
-		with open('conf/conf.json') as file:
+		with open('conf/conf.json', encoding='utf-8') as file:
 			conf = json.load(file)
 
 		with open('conf/screen_resolutions.json') as file:
