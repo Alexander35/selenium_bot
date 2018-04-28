@@ -31,6 +31,8 @@ class SeleniumBot():
 
 			target_url_index = random.randrange(len(self.conf['target_url']))
 			self.current_target_url = self.conf['target_url'][target_url_index]
+
+			self.proxies_for_request = None
 			
 			if self.conf['proxy_type'] != 'no':
 				current_proxy = random.choice(self.proxy_list['proxy_list'])
@@ -38,7 +40,12 @@ class SeleniumBot():
 				print(current_proxy)
 
 				current_proxy_addr = list(current_proxy)[0]
-				current_proxy_port = current_proxy[current_proxy_addr]			
+				current_proxy_port = current_proxy[current_proxy_addr]	
+
+				self.proxies_for_request = dict(
+					http='socks5://{}:{}'.format(current_proxy_addr, current_proxy_port),
+                    https='socks5://{}:{}'.format(current_proxy_addr, current_proxy_port)
+                )		
 
 				profile.set_preference("general.useragent.override", current_user_agent)
 
@@ -137,7 +144,12 @@ class SeleniumBot():
 	def get_url(self):
 
 		if self.conf['referer_url'] != "no":
-			requests.get(self.current_target_url, headers={'referer': self.conf['referer_url']})
+			requests.get(
+				self.current_target_url, 
+				headers={'referer': self.conf['referer_url']}, 
+				proxies=self.proxies_for_request
+			)
+			
 		print('get_current_target_url : {}'.format(self.current_target_url))
 		self.driver.get(self.current_target_url)
 
