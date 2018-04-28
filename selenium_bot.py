@@ -23,7 +23,6 @@ class SeleniumBot():
 		self.conf = conf
 
 		try:				
-
 			options = Options()
 			profile = webdriver.FirefoxProfile()
 
@@ -73,7 +72,6 @@ class SeleniumBot():
 
 		self.do()
 
-
 		if self.how_many_time() < self.time_on_session['from']:
 			time.sleep(self.time_on_session['from']-self.how_many_time())
 
@@ -84,9 +82,9 @@ class SeleniumBot():
 
 		try:
 			print('search_keywords : {}'.format(self.conf['search_keywords'])  )
-			print('search_keywords : {}'.format(self.conf['search_engines'])  )
+			print('search_engines : {}'.format(self.conf['search_engines'])  )
 			
-			if self.conf['search_keywords'] != []:
+			if self.conf['serch_in_the_web'] != "no":
 				self.search_in_the_web()
 
 			self.timer = time.time()
@@ -95,8 +93,6 @@ class SeleniumBot():
 			self.current_clicks = random.randrange(self.clicks_per_user['from'], self.clicks_per_user['to'])
 			print('current_clicks {} '.format(self.current_clicks))
 			self.clicker(1)
-
-
 
 		except Exception as exc:
 			print('step Error : {}'.format(exc))	
@@ -121,11 +117,15 @@ class SeleniumBot():
 		return self.driver.find_elements_by_tag_name('a')	
 
 	def clicker(self, n):
-		# all_links = self.driver.find_elements_by_tag_name('a')
+
 		all_links = self.get_all_links()
 
 		try:
-			all_links[random.randrange(len(all_links))].click()
+			link = all_links[random.randrange(len(all_links))]
+			
+			if self.conf['target_url'][0] in link.get_attribute('href'):
+				print('LINK : {}'.format(link.get_attribute('href')))
+				link.click()
 			n += 1
 		except Exception as exc:
 			print('click filed : {}'.format(exc)) 	
@@ -136,94 +136,34 @@ class SeleniumBot():
 
 	def get_url(self):
 
-		# self.driver.implicitly_wait(10)
 		if self.conf['referer_url'] != "no":
 			requests.get(self.current_target_url, headers={'referer': self.conf['referer_url']})
-		# print('ref : {}'.format(a))
 		print('get_current_target_url : {}'.format(self.current_target_url))
 		self.driver.get(self.current_target_url)
 
-	def get_parent_elem(self, elem, i):
-		parent_elem = elem.find_element_by_xpath('..')
-		# href = parent_elem.get_attribute('href')
-		# if href == None:
-		print('PinnerHTML :{}'.format(parent_elem.get_attribute("innerHTML")))
-		parent_elem.click()
-
-		if i <= 0:
-			return
-		
-		self.get_parent_elem(parent_elem, i-1)
-
-		# print('HREF:{}'.format(href))
-		# print('LINK_P :{} '.format(parent_elem.get_attribute('href')))
-		
-		# return 	
-
-	def travers_elements(self, elems):
-		for e in elems:
-			# href = l.get_attribute('text')
-			print('innerHTML :{}'.format(e.get_attribute("innerHTML")))
-			# self.driver.quit()
-			e.click()
-			# self.driver.back()
-			# self.driver.quit()	
-			self.get_parent_elem(e,15)	
-
-			
-
-			
-
 	def search_in_the_web(self):
-		print('!!!')
 		for search_engine in self.conf['search_engines']:
 			for keyword in self.conf['search_keywords']:
 				try:
-
-
 					print(search_engine, keyword,self.conf['target_url'][0])
 					self.driver.get('{}{}'.format(search_engine,keyword))
 
-					# if keyword in "https://asn24.ru/":
-						# print('######')
-
 					elems = self.driver.find_elements_by_tag_name('a')
 					for e in elems:
-						if keyword in '{}'.format(e.get_attribute('href')):
+						if ((self.clean_domain_fix(self.conf['target_url'][0]) in e.get_attribute('href')) 
+							and (search_engine not in e.get_attribute('href')) ):
 							print(e.get_attribute('href'))
 							e.click()
 
-
-
-					# self.travers_elements(elems)	
-
-						#Traverse elements. search for http://name.name in hrefs
- 						#click it
-
-					# elems = self.driver.find_elements_by_xpath(
-					# 		"//*[contains(text(), '{}')]".format(
-					# 			self.clean_domain_fix(
-					# 				self.conf['target_url'][0]
-					# 				)
-					# 			)
-					# 	)
-					# elems1 = self.driver.find_elements_by_xpath(
-					# 	"//*[contains(text(), '{}')]".format(							
-					# 			self.conf['target_url'][0]
-					# 		)
-					# )
-
-					# self.travers_elements(elems[1:])
-					# self.travers_elements(elems1[1:])		
-					self.driver.quit()	
+					for searched_link_title in self.conf['searched_link_titles']:
+						elems1 = self.driver.find_elements_by_partial_link_text(searched_link_title)
+						for e in elems1:
+							print(e.get_attribute('href'))
+							e.click()							
 
 				except Exception as exc:
 					print('error when search keywords : {}'.format(exc))	
-					
-
-	def parse_links(self):
-		pass	
-
+		self.driver.quit()			
 
 	def clean_domain_fix(self, raw_domain):
 		clean_domain = raw_domain\
@@ -233,8 +173,7 @@ class SeleniumBot():
 			.replace('http://', '')\
 			.replace('/','')
 
-		return clean_domain		
-		
+		return clean_domain
 
 def main():
 	try:

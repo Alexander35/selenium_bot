@@ -1,7 +1,7 @@
 {
 	"project_name" : "project_name",
 	"target_url" : [ 
-			"http://asn24.ru",
+			"https://asn24.ru",
 			"https://asn24.ru/blagotvoritelnost/",
 			"https://asn24.ru/afisha/"
 		],
@@ -9,6 +9,10 @@
 		"asn24",
 		"новости благовещенск",
 		"асн"
+	],
+	"searched_link_titles" : [
+		"служба новостей",
+		"новсти с характером"
 	],
 	"search_engines": [
 		"https://www.google.com/search?q=",
@@ -24,5 +28,6 @@
 			"pc"
 		],
 	"proxy_type": "no",
+	"serch_in_the_web" : "no",
 	"start_time": "now"
 }
