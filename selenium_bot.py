@@ -153,12 +153,20 @@ class SeleniumBot():
 		print('get_current_target_url : {}'.format(self.current_target_url))
 		self.driver.get(self.current_target_url)
 
-	def search_in_the_web(self):
+	def search_in_the_web(self, page_parameter=0):
+		print('page_parameter {}'.format(page_parameter))
+		if page_parameter > 3:
+			return
+
 		for search_engine in self.conf['search_engines']:
 			for keyword in self.conf['search_keywords']:
 				try:
 					print(search_engine, keyword,self.conf['target_url'][0])
-					self.driver.get('{}{}'.format(search_engine,keyword))
+					if page_parameter==0:
+						self.driver.get('{}{}'.format(search_engine,keyword))
+					else:
+						p_string = '&start={}&p={}'.format(page_parameter*10, page_parameter+1)
+						self.driver.get('{}{}{}'.format(search_engine,keyword, p_string))	
 
 					elems = self.driver.find_elements_by_tag_name('a')
 					for e in elems:
@@ -171,11 +179,12 @@ class SeleniumBot():
 						elems1 = self.driver.find_elements_by_partial_link_text(searched_link_title)
 						for e in elems1:
 							print(e.get_attribute('href'))
-							e.click()							
+							e.click()
 
 				except Exception as exc:
 					print('error when search keywords : {}'.format(exc))	
-		self.driver.quit()			
+		self.search_in_the_web(page_parameter=page_parameter+1)			
+		# self.driver.quit()			
 
 	def clean_domain_fix(self, raw_domain):
 		clean_domain = raw_domain\
