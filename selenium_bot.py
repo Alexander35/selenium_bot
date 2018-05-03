@@ -27,12 +27,13 @@ class SeleniumBot():
 			profile = webdriver.FirefoxProfile()
 
 			device_type_index = random.randrange(len(self.device_type))
-			current_user_agent = random.choice(self.user_agents[self.device_type[device_type_index]])
+			self.current_user_agent = random.choice(self.user_agents[self.device_type[device_type_index]])
 
 			target_url_index = random.randrange(len(self.conf['target_url']))
 			self.current_target_url = self.conf['target_url'][target_url_index]
 
 			self.proxies_for_request = None
+			
 			
 			if self.conf['proxy_type'] != 'no':
 				current_proxy = random.choice(self.proxy_list['proxy_list'])
@@ -42,22 +43,26 @@ class SeleniumBot():
 				current_proxy_addr = list(current_proxy)[0]
 				current_proxy_port = current_proxy[current_proxy_addr]	
 
-				self.proxies_for_request = dict(
-					http='socks5://{}:{}'.format(current_proxy_addr, current_proxy_port),
-                    https='socks5://{}:{}'.format(current_proxy_addr, current_proxy_port)
-                )		
+				self.proxies_for_request = {
+					# http='socks5://{}:{}'.format(current_proxy_addr, current_proxy_port),
+				
+     #                https='socks5://{}:{}'.format(current_proxy_addr, current_proxy_port)
+     				  'http':'socks5://{}:{}'.format(current_proxy_addr, current_proxy_port),
+     				  'https':'socks5://{}:{}'.format(current_proxy_addr, current_proxy_port),
+                }		
 
-				profile.set_preference("general.useragent.override", current_user_agent)
+				profile.set_preference("general.useragent.override", self.current_user_agent)
 
-				# profile.set_preference("network.proxy.type", 1)
-				profile.set_preference("network.proxy.share_proxy_settings", True)
+				profile.set_preference("network.proxy.type", 1)
+				profile.set_preference("network.proxy.share_proxy_settings", False)
 				profile.set_preference("network.http.use-cache", False)
 				# profile.set_preference("network.proxy.http", current_proxy_addr)
 				# profile.set_preference("network.proxy.http_port", int(current_proxy_port))
 				# profile.set_preference('network.proxy.ssl_port', int(current_proxy_port))
 				# profile.set_preference('network.proxy.ssl', current_proxy_addr)
 				profile.set_preference('network.proxy.socks', current_proxy_addr)
-				profile.set_preference('network.proxy.socks_port', int(current_proxy_port))		
+				profile.set_preference('network.proxy.socks_port', int(current_proxy_port))
+				# self.driver.set_page_load_timeout(300)	
 			
 			# profile.update_preferences()
 			self.driver = webdriver.Firefox(firefox_profile=profile, firefox_options=options)
@@ -144,11 +149,13 @@ class SeleniumBot():
 	def get_url(self):
 
 		if self.conf['referer_url'] != "no":
-			requests.get(
+			print(self.proxies_for_request)
+			a =requests.get(
 				self.current_target_url, 
-				headers={'referer': self.conf['referer_url']}, 
+				headers={'Referer': self.conf['referer_url'], 'User-Agent': self.current_user_agent}, 
 				proxies=self.proxies_for_request
 			)
+			print(a)
 			
 		print('get_current_target_url : {}'.format(self.current_target_url))
 		self.driver.get(self.current_target_url)
@@ -183,6 +190,7 @@ class SeleniumBot():
 
 				except Exception as exc:
 					print('error when search keywords : {}'.format(exc))	
+
 		self.search_in_the_web(page_parameter=page_parameter+1)			
 		# self.driver.quit()			
 
