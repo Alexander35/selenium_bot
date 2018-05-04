@@ -33,7 +33,8 @@ class SeleniumBot():
 			self.current_target_url = self.conf['target_url'][target_url_index]
 
 			self.proxies_for_request = None
-			
+			print("UA {}".format(self.current_user_agent))
+			profile.set_preference("general.useragent.override", self.current_user_agent)
 			
 			if self.conf['proxy_type'] != 'no':
 				current_proxy = random.choice(self.proxy_list['proxy_list'])
@@ -51,7 +52,7 @@ class SeleniumBot():
      				  'https':'socks5://{}:{}'.format(current_proxy_addr, current_proxy_port),
                 }		
 
-				profile.set_preference("general.useragent.override", self.current_user_agent)
+				
 
 				profile.set_preference("network.proxy.type", 1)
 				profile.set_preference("network.proxy.share_proxy_settings", False)
@@ -66,7 +67,7 @@ class SeleniumBot():
 			
 			# profile.update_preferences()
 			self.driver = webdriver.Firefox(firefox_profile=profile, firefox_options=options)
-			self.driver.set_page_load_timeout(30)
+			self.driver.set_page_load_timeout(300)
 			current_screen_resolution = random.choice(self.screen_resolutions[self.device_type[device_type_index]])
 
 			# print('current_screen_resolution : {}'.format(current_screen_resolution))
