@@ -8,10 +8,34 @@ import random
 import json
 import time
 import requests
+import logging
+
+def setup_logger(name, log_file, level=logging.INFO):
+    """Function setup as many loggers as you want"""
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+
+    handler = logging.FileHandler(log_file)        
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.addHandler(handler)
+
+    return logger
 
 class SeleniumBot():
+
+	def write_both_logs_info(self, message):
+		self.user_logger.info(message)
+		self.system_logger.info(message)
+
 	
 	def __init__(self, conf=None, screen_resolutions=None, user_agents=None, proxy_list=None):
+
+		self.user_logger = setup_logger('user_logger', 'log/user_logger.log', level=logging.DEBUG )
+		self.system_logger = setup_logger('system_logger', 'log/system_logger.log', level=logging.DEBUG )
+
+		self.write_both_logs_info('Log started')
 
 		self.target_url = conf['target_url']
 		self.clicks_per_user = conf['clicks_per_user']
@@ -29,25 +53,27 @@ class SeleniumBot():
 			device_type_index = random.randrange(len(self.device_type))
 			self.current_user_agent = random.choice(self.user_agents[self.device_type[device_type_index]])
 
+			self.write_both_logs_info('Current UA : {}'.format(self.current_user_agent))
+
 			target_url_index = random.randrange(len(self.conf['target_url']))
 			self.current_target_url = self.conf['target_url'][target_url_index]
 
+			self.write_both_logs_info('Current Target URL : {}'.format(self.current_target_url))
+
 			self.proxies_for_request = None
-			print("UA {}".format(self.current_user_agent))
+			# print("UA {}".format(self.current_user_agent))
 			profile.set_preference("general.useragent.override", self.current_user_agent)
 			
 			if self.conf['proxy_type'] != 'no':
 				current_proxy = random.choice(self.proxy_list['proxy_list'])
 
-				print(current_proxy)
+				# print(current_proxy)
+				self.write_both_logs_info('Current Proxy : {}'.format(current_proxy))
 
 				current_proxy_addr = list(current_proxy)[0]
 				current_proxy_port = current_proxy[current_proxy_addr]	
 
 				self.proxies_for_request = {
-					# http='socks5://{}:{}'.format(current_proxy_addr, current_proxy_port),
-				
-     #                https='socks5://{}:{}'.format(current_proxy_addr, current_proxy_port)
      				  'http':'socks5://{}:{}'.format(current_proxy_addr, current_proxy_port),
      				  'https':'socks5://{}:{}'.format(current_proxy_addr, current_proxy_port),
                 }		
@@ -57,21 +83,14 @@ class SeleniumBot():
 				profile.set_preference("network.proxy.type", 1)
 				profile.set_preference("network.proxy.share_proxy_settings", False)
 				profile.set_preference("network.http.use-cache", False)
-				# profile.set_preference("network.proxy.http", current_proxy_addr)
-				# profile.set_preference("network.proxy.http_port", int(current_proxy_port))
-				# profile.set_preference('network.proxy.ssl_port', int(current_proxy_port))
-				# profile.set_preference('network.proxy.ssl', current_proxy_addr)
 				profile.set_preference('network.proxy.socks', current_proxy_addr)
 				profile.set_preference('network.proxy.socks_port', int(current_proxy_port))
-				# self.driver.set_page_load_timeout(300)	
 			
-			# profile.update_preferences()
 			self.driver = webdriver.Firefox(firefox_profile=profile, firefox_options=options)
 			self.driver.set_page_load_timeout(300)
 			current_screen_resolution = random.choice(self.screen_resolutions[self.device_type[device_type_index]])
 
-			# print('current_screen_resolution : {}'.format(current_screen_resolution))
-			# print('current_UA : {}'.format(current_user_agent))
+			self.write_both_logs_info('Current Screen Resolution : {}'.format(current_screen_resolution))
 
 			self.driver.set_window_size(
 					current_screen_resolution['h'], 
@@ -81,34 +100,39 @@ class SeleniumBot():
 
 		except Exception as exc:
 			print('Can not init driver : {}'.format(exc))
+			self.system_logger.critical('Can not init driver : {}'.format(exc))
 			self.driver.quit()
 
+		self.write_both_logs_info('Task Starts')
 		self.do()
 
 		if self.how_many_time() < self.time_on_session['from']:
 			time.sleep(self.time_on_session['from']-self.how_many_time())
 
-
-		print('spended_time : {}'.format(self.how_many_time()))	
+		self.write_both_logs_info('Spended Time : {}'.format(self.how_many_time()))
+		self.write_both_logs_info('Task Ends'.format(current_screen_resolution))	
 
 	def do(self):
 
 		try:
-			print('search_keywords : {}'.format(self.conf['search_keywords'])  )
-			print('search_engines : {}'.format(self.conf['search_engines'])  )
+			# print('search_keywords : {}'.format(self.conf['search_keywords'])  )
+			# print('search_engines : {}'.format(self.conf['search_engines'])  )
 			
 			if self.conf['serch_in_the_web'] != "no":
+				self.write_both_logs_info('Search Throught Search Engines Starts')
 				self.search_in_the_web()
+				self.write_both_logs_info('Search Throught Search Engines Ends')
 
 			self.timer = time.time()
 			self.get_current_url_time()
 			self.get_url()
 			self.current_clicks = random.randrange(self.clicks_per_user['from'], self.clicks_per_user['to'])
-			print('current_clicks {} '.format(self.current_clicks))
+			self.write_both_logs_info('Current Estimating Clicks Per Session: {}'.format(self.current_clicks))
 			self.clicker(1)
 
 		except Exception as exc:
-			print('step Error : {}'.format(exc))	
+			print('step Error : {}'.format(exc))
+			self.system_logger.error('step Error : {}'.format(exc))	
 
 		finally:
 			self.driver.quit()
@@ -117,8 +141,8 @@ class SeleniumBot():
 		self.current_session_time =  random.randrange(
 				self.time_on_session['from'], 
 				self.time_on_session['to']
-		)	
-		print('current session time {}'.format(self.current_session_time))
+		)
+		self.write_both_logs_info('Current Estimating Session Duration: {}'.format(self.current_session_time))
 
 	def elapsed_time(self):
 		return self.current_session_time - self.how_many_time()		
@@ -137,10 +161,11 @@ class SeleniumBot():
 			link = all_links[random.randrange(len(all_links))]
 			
 			if self.conf['target_url'][0] in link.get_attribute('href'):
-				print('LINK : {}'.format(link.get_attribute('href')))
+				self.write_both_logs_info('Try To Click To: {}'.format(link.get_attribute('href')))
 				link.click()
 			n += 1
 		except Exception as exc:
+			self.system_logger.warning('click filed : {}'.format(exc))
 			print('click filed : {}'.format(exc)) 	
 
 		finally:
@@ -148,28 +173,27 @@ class SeleniumBot():
 				self.clicker(n)
 
 	def get_url(self):
-
-		if self.conf['referer_url'] != "no":
-			print(self.proxies_for_request)
-			a =requests.get(
-				self.current_target_url, 
-				headers={'Referer': self.conf['referer_url'], 'User-Agent': self.current_user_agent}, 
-				proxies=self.proxies_for_request
-			)
-			print(a)
-			
-		print('get_current_target_url : {}'.format(self.current_target_url))
+		# if self.conf['referer_url'] != "no":
+		# 	print(self.proxies_for_request)
+		# 	a =requests.get(
+		# 		self.current_target_url, 
+		# 		headers={'Referer': self.conf['referer_url'], 'User-Agent': self.current_user_agent}, 
+		# 		proxies=self.proxies_for_request
+		# 	)
+		# 	print(a)
+		self.write_both_logs_info('Gets Current Target URL: {}'.format(self.current_target_url))
 		self.driver.get(self.current_target_url)
 
 	def search_in_the_web(self, page_parameter=0):
-		print('page_parameter {}'.format(page_parameter))
+		# print('page_parameter {}'.format(page_parameter))
+		# self.write_both_logs_info('Search With Params: {}'.format(self.current_target_url))
 		if page_parameter > 3:
 			return
 
 		for search_engine in self.conf['search_engines']:
 			for keyword in self.conf['search_keywords']:
 				try:
-					print(search_engine, keyword,self.conf['target_url'][0])
+					self.write_both_logs_info('Search Engine: {}, Search Keyword: {}, Search For: {} '.format(search_engine, keyword, self.conf['target_url'][0]))
 					if page_parameter==0:
 						self.driver.get('{}{}'.format(search_engine,keyword))
 					else:
@@ -180,20 +204,20 @@ class SeleniumBot():
 					for e in elems:
 						if ((self.clean_domain_fix(self.conf['target_url'][0]) in e.get_attribute('href')) 
 							and (search_engine not in e.get_attribute('href')) ):
-							print(e.get_attribute('href'))
+							self.write_both_logs_info('Click To: {} '.format(e.get_attribute('href')))
 							e.click()
 
 					for searched_link_title in self.conf['searched_link_titles']:
 						elems1 = self.driver.find_elements_by_partial_link_text(searched_link_title)
 						for e in elems1:
-							print(e.get_attribute('href'))
+							self.write_both_logs_info('Click To: {} '.format(e.get_attribute('href')))
 							e.click()
 
 				except Exception as exc:
 					print('error when search keywords : {}'.format(exc))	
+					self.system_logger.error('error when search keywords : {}'.format(exc))
 
 		self.search_in_the_web(page_parameter=page_parameter+1)			
-		# self.driver.quit()			
 
 	def clean_domain_fix(self, raw_domain):
 		clean_domain = raw_domain\
