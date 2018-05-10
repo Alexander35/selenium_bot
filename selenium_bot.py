@@ -171,6 +171,7 @@ class SeleniumBot():
 			
 			if self.conf['target_url'][0] in link.get_attribute('href'):
 				self.write_both_logs_info('Try To Click To: {}'.format(link.get_attribute('href')))
+				link.location_once_scrolled_into_view
 				link.click()
 			n += 1
 		except Exception as exc:
