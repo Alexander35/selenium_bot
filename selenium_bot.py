@@ -44,26 +44,22 @@ class SeleniumBot():
 		self.proxy_list = proxy_list
 		self.conf = conf
 
-
 		self.timer_string = time.strftime("%d%b%Y_%H_%M_%S")
-		# print(self.timer_string)
 		stripped_url = re.sub(r'\W+', '', conf['target_url'][0])
-
 		log_folder_name = os.path.join('log', '{}{}'.format(self.timer_string, stripped_url))
-
 		if not os.path.exists(log_folder_name):
 		    os.makedirs(log_folder_name)
 
-		    
-
 		self.user_logger = setup_logger('user_logger', os.path.join(log_folder_name, 'user_log.log'), level=logging.DEBUG )
 		self.system_logger = setup_logger('system_logger',  os.path.join(log_folder_name, 'system_log.log'), level=logging.DEBUG )
-
 		self.write_both_logs_info('Log started')
-
 
 		try:				
 			options = Options()
+			
+			if conf['headless'] == "yes":
+				options.add_argument("--headless")
+
 			profile = webdriver.FirefoxProfile()
 
 			device_type_index = random.randrange(len(self.device_type))

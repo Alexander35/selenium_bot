@@ -1,5 +1,5 @@
 {
-	"project_name" : "project_name",
+	"headless": "yes",
 	"target_url" : [ 
 			"https://asn24.ru",
 			"https://asn24.ru/blagotvoritelnost/",
@@ -27,6 +27,5 @@
 			"pc"
 		],
 	"proxy_type": "no",
-	"serch_in_the_web" : "no",
-	"start_time": "now"
+	"serch_in_the_web" : "no"
 }
