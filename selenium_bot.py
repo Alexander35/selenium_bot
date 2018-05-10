@@ -9,6 +9,9 @@ import json
 import time
 import requests
 import logging
+import os
+import os, errno
+import re
 
 def setup_logger(name, log_file, level=logging.INFO):
     """Function setup as many loggers as you want"""
@@ -32,11 +35,6 @@ class SeleniumBot():
 	
 	def __init__(self, conf=None, screen_resolutions=None, user_agents=None, proxy_list=None):
 
-		self.user_logger = setup_logger('user_logger', 'log/user_logger.log', level=logging.DEBUG )
-		self.system_logger = setup_logger('system_logger', 'log/system_logger.log', level=logging.DEBUG )
-
-		self.write_both_logs_info('Log started')
-
 		self.target_url = conf['target_url']
 		self.clicks_per_user = conf['clicks_per_user']
 		self.device_type = conf['device_type']
@@ -45,6 +43,24 @@ class SeleniumBot():
 		self.user_agents = user_agents
 		self.proxy_list = proxy_list
 		self.conf = conf
+
+
+		self.timer_string = time.strftime("%d%b%Y_%H_%M_%S")
+		# print(self.timer_string)
+		stripped_url = re.sub(r'\W+', '', conf['target_url'][0])
+
+		log_folder_name = os.path.join('log', '{}{}'.format(self.timer_string, stripped_url))
+
+		if not os.path.exists(log_folder_name):
+		    os.makedirs(log_folder_name)
+
+		    
+
+		self.user_logger = setup_logger('user_logger', os.path.join(log_folder_name, 'user_log.log'), level=logging.DEBUG )
+		self.system_logger = setup_logger('system_logger',  os.path.join(log_folder_name, 'system_log.log'), level=logging.DEBUG )
+
+		self.write_both_logs_info('Log started')
+
 
 		try:				
 			options = Options()
@@ -76,9 +92,7 @@ class SeleniumBot():
 				self.proxies_for_request = {
      				  'http':'socks5://{}:{}'.format(current_proxy_addr, current_proxy_port),
      				  'https':'socks5://{}:{}'.format(current_proxy_addr, current_proxy_port),
-                }		
-
-				
+                }
 
 				profile.set_preference("network.proxy.type", 1)
 				profile.set_preference("network.proxy.share_proxy_settings", False)
@@ -86,7 +100,7 @@ class SeleniumBot():
 				profile.set_preference('network.proxy.socks', current_proxy_addr)
 				profile.set_preference('network.proxy.socks_port', int(current_proxy_port))
 			
-			self.driver = webdriver.Firefox(firefox_profile=profile, firefox_options=options)
+			self.driver = webdriver.Firefox(firefox_profile=profile, firefox_options=options, log_path="log/geckodriver.log")
 			self.driver.set_page_load_timeout(300)
 			current_screen_resolution = random.choice(self.screen_resolutions[self.device_type[device_type_index]])
 
@@ -115,8 +129,6 @@ class SeleniumBot():
 	def do(self):
 
 		try:
-			# print('search_keywords : {}'.format(self.conf['search_keywords'])  )
-			# print('search_engines : {}'.format(self.conf['search_engines'])  )
 			
 			if self.conf['serch_in_the_web'] != "no":
 				self.write_both_logs_info('Search Throught Search Engines Starts')
@@ -124,6 +136,7 @@ class SeleniumBot():
 				self.write_both_logs_info('Search Throught Search Engines Ends')
 
 			self.timer = time.time()
+
 			self.get_current_url_time()
 			self.get_url()
 			self.current_clicks = random.randrange(self.clicks_per_user['from'], self.clicks_per_user['to'])
@@ -131,8 +144,8 @@ class SeleniumBot():
 			self.clicker(1)
 
 		except Exception as exc:
-			print('step Error : {}'.format(exc))
-			self.system_logger.error('step Error : {}'.format(exc))	
+			print('Session Error : {}'.format(exc))
+			self.system_logger.error('Session Error : {}'.format(exc))	
 
 		finally:
 			self.driver.quit()
