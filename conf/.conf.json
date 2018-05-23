@@ -20,8 +20,8 @@
 	],		
 	"referer_url" : "https://youtube.com",
 	"client_hosts": 6000,
-	"clicks_per_user": {"from": 2, "to": 2000},
-	"time_on_session": {"from" : 1, "to" : 100},
+	"clicks_per_user": {"from": 20, "to": 2000},
+	"time_on_session": {"from" : 100, "to" : 200},
 	"device_type" : [
 			"phone",
 			"pc"

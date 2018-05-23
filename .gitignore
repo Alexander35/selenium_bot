@@ -1,2 +1,4 @@
 __pycache__/
 geckodriver.log
+selenium_bot_start.sh
+request-referer-test.py
