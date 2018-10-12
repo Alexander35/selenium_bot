@@ -20,6 +20,7 @@
 	],		
 	"referer_url" : "https://youtube.com",
 	"client_hosts": 6000,
+	"random_clicks" : "no",
 	"clicks_per_user": {"from": 20, "to": 2000},
 	"time_on_session": {"from" : 100, "to" : 200},
 	"device_type" : [

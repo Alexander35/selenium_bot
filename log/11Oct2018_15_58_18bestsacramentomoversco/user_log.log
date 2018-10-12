@@ -1,0 +1,15 @@
+2018-10-11 15:58:18,847 INFO Log started
+2018-10-11 15:58:18,847 INFO Current UA : Opera/9.80 (Android 4.1.2; Linux; Opera Mobi/ADR-1305251841) Presto/2.11.355 Version/12.10
+2018-10-11 15:58:18,848 INFO Current Target URL : bestsacramentomovers.co
+2018-10-11 15:58:22,375 INFO Current Screen Resolution : {'h': '1125', 'w': '2436'}
+2018-10-11 15:58:22,430 INFO Task Starts
+2018-10-11 15:58:22,430 INFO Current Estimating Session Duration: 141
+2018-10-11 15:58:30,167 INFO Get YELP.COM at 7.737530708312988
+2018-10-11 15:58:36,442 INFO main search button at 14.012444972991943
+2018-10-11 15:58:36,486 INFO We have no found the searched company name: Best Sacramento Movers  into the current page : 1, get next page. time : 14.055870771408081
+2018-10-11 15:58:36,594 INFO Sleep 5 secs. time : 14.164570093154907
+2018-10-11 15:58:41,597 INFO Click!. time : 19.167055130004883
+2018-10-11 15:58:41,966 INFO We found the `Next` button. Gonna get the next page: 2. time : 19.535823583602905
+2018-10-11 15:58:41,982 INFO We have no found the searched company name: Best Sacramento Movers  into the current page : 2, get next page. time : 19.552469730377197
+2018-10-11 15:58:42,017 INFO Sleep 5 secs. time : 19.587489128112793
+2018-10-11 15:58:47,023 INFO Click!. time : 24.592736959457397

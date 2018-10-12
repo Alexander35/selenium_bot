@@ -1,0 +1,28 @@
+{
+	"headless": "no",
+
+	"target_url": [
+		"bestsacramentomovers.co"
+	],
+
+	"search_for_company_yelp_com" : "Best Sacramento Movers",
+	"main_search_keys" : {
+		"find_desc" : "Movers",
+		"dropperText_Mast" : "Sacramento"
+	},
+
+	"page_trasholder_yelp_com" : 100,
+
+
+	"client_hosts": 100,
+	"random_clicks" : "no",
+	"clicks_per_user": {"from": 20, "to": 2000},
+	"time_on_session": {"from" : 100, "to" : 200},
+	"time_on_page_yelp_com": {"from": 5, "to": 8},
+	"device_type" : [
+			"phone",
+			"pc"
+		],
+	"proxy_type": "no",
+	"serch_in_the_web" : "no"
+}

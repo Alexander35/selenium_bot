@@ -1,0 +1,48 @@
+2018-10-12 15:51:37,256 INFO Log started
+2018-10-12 15:51:37,257 INFO Current UA : Dalvik/2.1.0 (Linux; U; Android 6.0.1; Nexus Player Build/MMB29T)
+2018-10-12 15:51:37,257 INFO Current Target URL : bestsacramentomovers.co
+2018-10-12 15:51:41,185 INFO Current Screen Resolution : {'h': '750', 'w': '1334'}
+2018-10-12 15:51:41,284 INFO Task Starts
+2018-10-12 15:51:41,284 INFO Current Estimating Session Duration: 156
+2018-10-12 15:51:48,925 INFO Get YELP.COM at 7.640892505645752
+2018-10-12 15:51:54,853 INFO main search button at 13.568188905715942
+2018-10-12 15:51:54,901 INFO We have no found the searched company name: `Best Sacramento Movers`  into the current page : 1, get next page. time : 13.61665153503418
+2018-10-12 15:51:55,055 INFO Click!. time : 13.770247220993042
+2018-10-12 15:51:55,413 INFO We found the `Next` button. Gonna get the next page: 2. time : 14.128045082092285
+2018-10-12 15:51:55,424 INFO We have no found the searched company name: `Best Sacramento Movers`  into the current page : 2, get next page. time : 14.139793634414673
+2018-10-12 15:51:55,450 INFO Click!. time : 14.165979146957397
+2018-10-12 15:51:55,479 INFO Can`t click it. Sleep 3 secs. and try again time : 14.195001363754272
+2018-10-12 15:51:58,493 INFO We have no found the searched company name: `Best Sacramento Movers`  into the current page : 2, get next page. time : 17.20845341682434
+2018-10-12 15:51:58,540 INFO Click!. time : 17.25588345527649
+2018-10-12 15:51:58,879 INFO We found the `Next` button. Gonna get the next page: 3. time : 17.594472885131836
+2018-10-12 15:51:58,890 INFO We have no found the searched company name: `Best Sacramento Movers`  into the current page : 3, get next page. time : 17.605801343917847
+2018-10-12 15:51:58,937 INFO Click!. time : 17.652296543121338
+2018-10-12 15:51:58,957 INFO Can`t click it. Sleep 3 secs. and try again time : 17.67231774330139
+2018-10-12 15:52:02,029 INFO We have no found the searched company name: `Best Sacramento Movers`  into the current page : 3, get next page. time : 20.744152069091797
+2018-10-12 15:52:02,103 INFO Click!. time : 20.818140506744385
+2018-10-12 15:52:02,441 INFO We found the `Next` button. Gonna get the next page: 4. time : 21.15674114227295
+2018-10-12 15:52:02,455 INFO We have no found the searched company name: `Best Sacramento Movers`  into the current page : 4, get next page. time : 21.170621633529663
+2018-10-12 15:52:02,503 INFO Click!. time : 21.21884775161743
+2018-10-12 15:52:02,526 INFO Can`t click it. Sleep 3 secs. and try again time : 21.241490364074707
+2018-10-12 15:52:06,468 INFO We have no found the searched company name: `Best Sacramento Movers`  into the current page : 4, get next page. time : 25.183374643325806
+2018-10-12 15:52:06,499 INFO Click!. time : 25.214420080184937
+2018-10-12 15:52:06,834 INFO We found the `Next` button. Gonna get the next page: 5. time : 25.54945158958435
+2018-10-12 15:52:06,881 INFO We have no found the searched company name: `Best Sacramento Movers`  into the current page : 5, get next page. time : 25.596836805343628
+2018-10-12 15:52:06,946 INFO Click!. time : 25.662006378173828
+2018-10-12 15:52:06,979 INFO Can`t click it. Sleep 3 secs. and try again time : 25.69491481781006
+2018-10-12 15:52:11,369 INFO We found a company link at 30.066293954849243 company name : `Best Sacramento Movers`, page : 5
+2018-10-12 15:52:15,303 INFO Get company page . Time : 34.01838707923889
+2018-10-12 15:52:15,303 INFO try to find the company link : bestsacramentomovers.co, Time : 34.01861310005188
+2018-10-12 15:52:15,524 INFO COMPANY SITE LINK CLICKED! Time : 34.239521503448486
+2018-10-12 15:52:15,985 INFO COMPANY SITE LINK CLICKED! Time : 34.70015478134155
+2018-10-12 15:52:16,511 INFO COMPANY SITE LINK CLICKED! Time : 35.22637343406677
+2018-10-12 15:52:16,923 INFO COMPANY SITE LINK CLICKED! Time : 35.63838219642639
+2018-10-12 15:52:17,396 INFO COMPANY SITE LINK CLICKED! Time : 36.11110067367554
+2018-10-12 15:52:17,819 INFO COMPANY SITE LINK CLICKED! Time : 36.53493309020996
+2018-10-12 15:52:18,258 INFO COMPANY SITE LINK CLICKED! Time : 36.9734742641449
+2018-10-12 15:52:18,561 INFO COMPANY SITE LINK CLICKED! Time : 37.27611327171326
+2018-10-12 15:52:18,906 INFO COMPANY SITE LINK CLICKED! Time : 37.62139534950256
+2018-10-12 15:52:19,487 INFO COMPANY SITE LINK CLICKED! Time : 38.20286774635315
+2018-10-12 15:52:21,097 INFO Browser Closed! Time : 39.81214880943298
+2018-10-12 15:53:21,326 INFO Spended Time : 100.04184317588806
+2018-10-12 15:53:21,327 INFO Task Ends

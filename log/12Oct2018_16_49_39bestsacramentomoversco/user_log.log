@@ -1,0 +1,34 @@
+2018-10-12 16:49:39,045 INFO Log started
+2018-10-12 16:49:39,046 INFO Current UA : Mozilla/5.0 (Windows NT 5.1; rv:13.0) Gecko/20100101 Firefox/13.0.1
+2018-10-12 16:49:39,046 INFO Current Target URL : bestsacramentomovers.co
+2018-10-12 16:49:42,762 INFO Current Screen Resolution : {'h': '1024', 'w': '768'}
+2018-10-12 16:49:42,821 INFO Task Starts
+2018-10-12 16:49:42,821 INFO Current Estimating Session Duration: 187
+2018-10-12 16:49:49,311 INFO Get YELP.COM at 6.490241527557373
+2018-10-12 16:49:49,312 INFO stay on page for: 5sec, page : 6.490514755249023
+2018-10-12 16:49:59,549 INFO main search button at 16.7279691696167
+2018-10-12 16:49:59,549 INFO stay on page for: 6sec, page : 16.728265285491943
+2018-10-12 16:50:05,575 INFO We have no found the searched company name: `Best Sacramento Movers`  into the current page : 1, get next page. time : 22.753695964813232
+2018-10-12 16:50:05,620 INFO Click!. time : 22.799139738082886
+2018-10-12 16:50:06,002 INFO stay on page for: 7sec, page : 23.180688619613647
+2018-10-12 16:50:13,008 INFO We found the `Next` button. Gonna get the next page: 2. time : 30.187099933624268
+2018-10-12 16:50:13,020 INFO We have no found the searched company name: `Best Sacramento Movers`  into the current page : 2, get next page. time : 30.199480295181274
+2018-10-12 16:50:13,084 INFO Click!. time : 30.26286292076111
+2018-10-12 16:50:13,602 INFO stay on page for: 7sec, page : 30.7814302444458
+2018-10-12 16:50:20,610 INFO We found the `Next` button. Gonna get the next page: 3. time : 37.78887152671814
+2018-10-12 16:50:20,619 INFO We have no found the searched company name: `Best Sacramento Movers`  into the current page : 3, get next page. time : 37.797903060913086
+2018-10-12 16:50:20,650 INFO Click!. time : 37.829001665115356
+2018-10-12 16:50:21,046 INFO stay on page for: 5sec, page : 38.22459030151367
+2018-10-12 16:50:26,051 INFO We found the `Next` button. Gonna get the next page: 4. time : 43.229649782180786
+2018-10-12 16:50:26,062 INFO We have no found the searched company name: `Best Sacramento Movers`  into the current page : 4, get next page. time : 43.24083495140076
+2018-10-12 16:50:26,102 INFO Click!. time : 43.280905961990356
+2018-10-12 16:50:26,456 INFO stay on page for: 7sec, page : 43.63463616371155
+2018-10-12 16:50:33,463 INFO We found the `Next` button. Gonna get the next page: 5. time : 50.64216089248657
+2018-10-12 16:50:33,489 INFO We found a company link at 50.6511766910553 company name : `Best Sacramento Movers`, page : 5
+2018-10-12 16:50:36,628 INFO Get company page . Time : 53.80714392662048
+2018-10-12 16:50:36,628 INFO try to find the company link : bestsacramentomovers.co, Time : 53.80740833282471
+2018-10-12 16:50:36,850 INFO COMPANY SITE LINK CLICKED! Time : 54.02940058708191
+2018-10-12 16:50:36,851 INFO stay on page for: 7sec, page : 54.02977919578552
+2018-10-12 16:50:43,858 INFO This is it, wait after session is closed! Time : 61.03704881668091
+2018-10-12 16:51:22,821 INFO Spended Time : 100.00003433227539
+2018-10-12 16:51:22,821 INFO Task Ends
