@@ -26,16 +26,16 @@ class BotManager():
 
         day_time_start.append(random.randrange(12, 23))
 
-        for i in range(int(self.thread_numbers * 0.8)-1):
+        for i in range(int(self.conf['client_hosts'] * 0.8)-1):
             day_time_start.append(random.randrange(12, 23))
 
-        for i in range(int(self.thread_numbers * 0.2)):
+        for i in range(int(self.conf['client_hosts'] * 0.2)):
             night_time_start.append(random.randrange(0, 11))
 
         self.sheduled_time_to_start = {
             'day_time': day_time_start, 'night_time': night_time_start}
 
-        print(self.sheduled_time_to_start )    
+        print(self.sheduled_time_to_start)
 
     def write_schedule_to_celery(self):
         pass
