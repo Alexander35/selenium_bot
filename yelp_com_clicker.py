@@ -37,12 +37,13 @@ class YelpComClicker(SeleniumBot):
             'Get YELP.COM at {}'.format(self.how_many_time()))
 
     def click_find_by_keys(self):
+        search_keys_index = random.randrange(len(self.conf["main_search_keys"]))
+        current_search_keys = self.conf["main_search_keys"][search_keys_index]
+        self.write_both_logs_info('current search keys are :{} . Time {}'.format(current_search_keys, self.how_many_time()))
         self.driver.find_element_by_id('find_desc').clear()
-        self.driver.find_element_by_id('find_desc').send_keys(
-            self.conf["main_search_keys"]["find_desc"])
+        self.driver.find_element_by_id('find_desc').send_keys(current_search_keys["find_desc"])
         self.driver.find_element_by_id('dropperText_Mast').clear()
-        self.driver.find_element_by_id('dropperText_Mast').send_keys(
-            self.conf["main_search_keys"]["dropperText_Mast"])
+        self.driver.find_element_by_id('dropperText_Mast').send_keys(current_search_keys["dropperText_Mast"])
         self.driver.find_element_by_id('header-search-submit').click()
 
         self.write_both_logs_info(
