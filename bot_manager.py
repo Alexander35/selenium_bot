@@ -1,6 +1,8 @@
 from selenium_bot import SeleniumBot
 import json
 import random
+from crontab import CronTab
+import os
 
 
 class BotManager():
@@ -37,14 +39,34 @@ class BotManager():
 
         print(self.sheduled_time_to_start)
 
-    def write_schedule_to_celery(self):
-        pass
+        self.write_schedule_to_cron()
+
+    def write_schedule_to_cron(self):
+        cron = CronTab(user=self.conf['username'])
+
+        # del old jobs
+        for job in cron:
+            if job.comment == 'selenium_bot':
+                cron.remove(job)
+
+        cron.write()
+
+        for dt in self.sheduled_time_to_start['day_time']:
+            selenium_job = cron.new(command=os.path.join(os.getcwd(), self.conf['bot_name']), comment='selenium_bot')
+            selenium_job.hour.also.on(dt)
+            selenium_job.minute.also.on(random.randrange(60))
+            cron.write()
+
+        for nt in self.sheduled_time_to_start['night_time']:
+            selenium_job = cron.new(command=os.path.join(os.getcwd(), self.conf['bot_name']), comment='selenium_bot')
+            selenium_job.minute.also.on(random.randrange(60))
+            selenium_job.hour.also.on(nt)
+            cron.write()
 
 
 def main():
 
     BM = BotManager()
-
 
 if __name__ == '__main__':
     main()

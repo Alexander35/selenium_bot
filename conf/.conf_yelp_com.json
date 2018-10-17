@@ -1,20 +1,26 @@
 {
-	"headless": "no",
+	"headless": "yes",
 
 	"target_url": [
 		"bestsacramentomovers.co"
 	],
 
 	"search_for_company_yelp_com" : "Best Sacramento Movers",
-	"main_search_keys" : {
-		"find_desc" : "Movers",
-		"dropperText_Mast" : "Sacramento"
-	},
+	"main_search_keys" : [
+		{
+			"find_desc" : "Movers",
+			"dropperText_Mast" : "Sacramento"
+		},
+		{
+			"find_desc" : "moving company",
+			"dropperText_Mast" : "Sacramento"
+		}
+	],
 
 	"page_trasholder_yelp_com" : 100,
 
 
-	"client_hosts": 100,
+	"client_hosts": 1000,
 	"random_clicks" : "no",
 	"clicks_per_user": {"from": 20, "to": 2000},
 	"time_on_session": {"from" : 100, "to" : 200},
@@ -23,6 +29,9 @@
 			"phone",
 			"pc"
 		],
-	"proxy_type": "no",
-	"serch_in_the_web" : "no"
+	"proxy_type": "yes",
+	"serch_in_the_web" : "no",
+
+	"username" : "alexander",
+	"bot_name" : "yelp_bot_start.sh"
 }
