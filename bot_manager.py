@@ -16,7 +16,7 @@ class BotManager():
             print('read conf error : {}'.format(exc))
 
         self.thread_numbers = self.calculate_threads_number()
-        print(self.thread_numbers)
+        # print(self.thread_numbers)
         self.create_schedule()
 
     def calculate_threads_number(self):
@@ -37,7 +37,7 @@ class BotManager():
         self.sheduled_time_to_start = {
             'day_time': day_time_start, 'night_time': night_time_start}
 
-        print(self.sheduled_time_to_start)
+        # print(self.sheduled_time_to_start)
 
         self.write_schedule_to_cron()
 
@@ -62,6 +62,12 @@ class BotManager():
             selenium_job.minute.also.on(random.randrange(60))
             selenium_job.hour.also.on(nt)
             cron.write()
+
+        self.renew_used_proxy_file()
+
+    def renew_used_proxy_file(self):
+        with open('conf/used_proxy.json', 'w') as save_proxy_file:
+            json.dump({}, save_proxy_file)
 
 
 def main():

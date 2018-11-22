@@ -13,6 +13,7 @@ import os
 import os
 import errno
 import re
+import sys
 
 
 def setup_logger(name, log_file, level=logging.INFO):
@@ -86,14 +87,32 @@ class SeleniumBot():
                 "general.useragent.override", self.current_user_agent)
 
             if self.conf['proxy_type'] != 'no':
-                current_proxy = random.choice(self.proxy_list['proxy_list'])
+                if self.conf['proxy_type'] == 'conf_file':
+                    current_proxy = random.choice(self.proxy_list['proxy_list'])
+                    current_proxy_addr = list(current_proxy)[0]
+                    current_proxy_port = current_proxy[current_proxy_addr]
+                elif self.conf['proxy_type'] == 'api.getproxylist.com':
+                    response = requests.get(
+                        'https://api.getproxylist.com/proxy?protocol[]=socks5&country[]=US&lastTested=3600&anonymity[]=high%20anonymity&anonymity[]=anonymous&allowsUserAgentHeader=1&maxSecondsToFirstByte=1&allowsHttps=1&maxConnectTime=1&minUptime=75&apiKey={}'.format(
+                            self.conf['getproxylist_api_key']))
+                    response = json.loads(response.text)
+                    current_proxy_addr = response['ip']
+                    current_proxy_port = response['port']
+                    current_proxy = '{} : {}'.format(response['ip'], response['port'])
 
-                # print(current_proxy)
+                with open('conf/used_proxy.json', encoding='utf-8') as used_proxy_file:
+                    used_proxy = json.load(used_proxy_file)
+                    if current_proxy_addr in used_proxy:
+                        self.write_both_logs_info(
+                            'The proxy used before. Exit : {}'.format(current_proxy))
+                        sys.exit()
+
+                used_proxy[current_proxy_addr] = current_proxy_port
+                with open('conf/used_proxy.json', 'w') as save_proxy_file:
+                    json.dump(used_proxy, save_proxy_file)
+
                 self.write_both_logs_info(
                     'Current Proxy : {}'.format(current_proxy))
-
-                current_proxy_addr = list(current_proxy)[0]
-                current_proxy_port = current_proxy[current_proxy_addr]
 
                 self.proxies_for_request = {
                     'http': 'socks5://{}:{}'.format(current_proxy_addr, current_proxy_port),
@@ -108,6 +127,8 @@ class SeleniumBot():
                     'network.proxy.socks', current_proxy_addr)
                 profile.set_preference(
                     'network.proxy.socks_port', int(current_proxy_port))
+
+
 
             caps = DesiredCapabilities().FIREFOX
             # interactive

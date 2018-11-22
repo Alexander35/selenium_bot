@@ -3,6 +3,7 @@ import json
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import ElementClickInterceptedException
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -32,19 +33,36 @@ class YelpComClicker(SeleniumBot):
             time.sleep(stay_time)
 
     def get_yelp(self):
-        self.driver.get("https://yelp.com")
-        self.write_both_logs_info(
-            'Get YELP.COM at {}'.format(self.how_many_time()))
+        try:
+            self.driver.get("https://yelp.com")
+
+            self.write_both_logs_info(
+                'Get YELP.COM at {}'.format(self.how_many_time()))
+        except WebDriverException:
+            self.write_both_logs_info(
+                'NOTGet YELP.COM error  at{}'.format(self.how_many_time()))
+            # time.sleep(5)
+            self.driver.quit()
+            exit()
 
     def click_find_by_keys(self):
         search_keys_index = random.randrange(len(self.conf["main_search_keys"]))
         current_search_keys = self.conf["main_search_keys"][search_keys_index]
         self.write_both_logs_info('current search keys are :{} . Time {}'.format(current_search_keys, self.how_many_time()))
-        self.driver.find_element_by_id('find_desc').clear()
-        self.driver.find_element_by_id('find_desc').send_keys(current_search_keys["find_desc"])
-        self.driver.find_element_by_id('dropperText_Mast').clear()
-        self.driver.find_element_by_id('dropperText_Mast').send_keys(current_search_keys["dropperText_Mast"])
-        self.driver.find_element_by_id('header-search-submit').click()
+        try:
+            self.driver.find_element_by_id('find_desc').clear()
+            self.driver.find_element_by_id('find_desc').send_keys(current_search_keys["find_desc"])
+            self.driver.find_element_by_id('dropperText_Mast').clear()
+            self.driver.find_element_by_id('dropperText_Mast').send_keys(current_search_keys["dropperText_Mast"])
+            self.driver.find_element_by_id('header-search-submit').click()
+        except NoSuchElementException:
+            # probably we use mobile version
+            self.driver.find_element_by_class_name('icon--24-search').click()
+            self.driver.find_element_by_class_name('find-desc').clear()
+            self.driver.find_element_by_class_name('find-desc').send_keys(current_search_keys["find_desc"])
+            self.driver.find_element_by_class_name('find-loc').clear()
+            self.driver.find_element_by_class_name('find-loc').send_keys(current_search_keys["dropperText_Mast"])
+            self.driver.find_element_by_class_name('js-cta-menubar-pitch-search').click()
 
         self.write_both_logs_info(
             'main search button at {}'.format(self.how_many_time()))
@@ -62,34 +80,47 @@ class YelpComClicker(SeleniumBot):
                                       self.conf['search_for_company_yelp_com'], page, self.how_many_time()))
             
 
-            page_links = self.driver.find_elements_by_class_name(
-                "pagination-label")
+            # page_links = self.driver.find_elements_by_class_name(
+            #     "pagination-label")
+            # self.write_both_logs_info('page links :{}'.format(page_links))
 
-            for pl in page_links:
-                if pl.text == "Next":
-                    self.write_both_logs_info('Click!. time : {}'.format(
-                                              self.how_many_time()))                    
-                    try:
-                        pl.click()
-                        page = page + 1
-                        self.stay_on_page_time()
 
-                        if page > self.conf['page_trasholder_yelp_com']:
-                            self.write_both_logs_info('Can`t find the company page link by walking on pages. Cantch page trasholder: {}. time : {}, EXIT!'.format(
-                                                      self.conf['page_trasholder_yelp_com'], self.how_many_time()))
-                            self.driver.quit()
-                            break
+            try:
+                self.driver.find_element_by_id('banner-decline-temp').click()
+            except Exception:
+                pass
+            try:
+                self.driver.find_element_by_class_name('next').click()
+            except Exception:
+                pass
 
-                        self.write_both_logs_info('We found the `Next` button. Gonna get the next page: {}. time : {}'.format(
-                                                  page, self.how_many_time()))                        
-                    except StaleElementReferenceException:
-                        self.find_page_with_target(page)
-                    except ElementClickInterceptedException:
-                        self.write_both_logs_info('Can`t click it. Sleep 3 secs. and try again time : {}'.format(
-                                                  self.how_many_time()))                        
-                        time.sleep(3)
-                    finally:       
-                        self.find_page_with_target(page)
+            try:
+                self.driver.find_element_by_class_name('next-link').click()
+            except Exception:
+                pass
+
+            self.write_both_logs_info('Click!. time : {}'.format(
+                                      self.how_many_time()))
+            try:
+
+                page = page + 1
+                self.stay_on_page_time()
+
+                if page > self.conf['page_trasholder_yelp_com']:
+                    self.write_both_logs_info('Can`t find the company page link by walking on pages. Cantch page trasholder: {}. time : {}, EXIT!'.format(
+                                              self.conf['page_trasholder_yelp_com'], self.how_many_time()))
+                    self.driver.quit()
+
+                self.write_both_logs_info('We found the `Next` button. Gonna get the next page: {}. time : {}'.format(
+                                          page, self.how_many_time()))
+            except StaleElementReferenceException:
+                self.find_page_with_target(page)
+            except ElementClickInterceptedException:
+                self.write_both_logs_info('Can`t click it. Sleep 3 secs. and try again time : {}'.format(
+                                          self.how_many_time()))
+                time.sleep(3)
+            finally:
+                self.find_page_with_target(page)
 
     def get_company_page(self, company_page_link):
         company_page_link.click()
